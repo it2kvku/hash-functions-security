@@ -1,0 +1,8 @@
+HOP DONG SO 2026/HD-117
+=======================
+Ben A : Cong ty ABC
+Ben B : Cong ty XYZ
+Gia tri hop dong : 12.000.000 VND
+Han thanh toan   : 30/11/2026
+Dieu khoan: Ben B thanh toan mot lan trong vong 30 ngay ke tu ngay ky.
+Nguoi dai dien Ben A ky ten va dong dau.

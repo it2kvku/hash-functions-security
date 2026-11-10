@@ -1,0 +1,4 @@
+# Demo chi dung thu vien chuan Python (hashlib, hmac, secrets, json).
+# Khong can cai gi. Neu muon nang cap KDF that:
+#   argon2-cffi==21.3.0
+#   bcrypt==4.1.2

@@ -1,0 +1,5 @@
+__pycache__/
+*.py[cod]
+.venv/
+demo/data/users.json
+demo/data/integrity.manifest.json
