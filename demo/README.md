@@ -7,8 +7,8 @@ Ba trụ cột lý thuyết biến thành ba module chạy được:
 |---|---|---|
 | **Toàn vẹn (Integrity)** | `src/integrity.py` | Baseline SHA-256 thư mục → phát hiện file bị sửa/xóa/thêm |
 | **Xác thực (Authentication)** | `src/password_auth.py` | Lưu mật khẩu PBKDF2-HMAC-SHA256 + salt từng người dùng |
-| **Xác thực tin nhắn** | `src/hmac_channel.py` | HMAC (RFC 2104) — chặn tin bị sửa và ký sai khóa |
-| Minh họa tấn công | `src/attacks.py` | Birthday collision trên hash rút gọn + đo tốc độ băm |
+| **Xác thực tin nhắn** | `src/hmac_channel.py` | HMAC (RFC 2104) — chặn tin bị sửa và ký sai khóa; HOTP/TOTP (RFC 4226/6238) |
+| Minh họa tấn công | `src/attacks.py` | Birthday collision, length-extension (lõi MD5 tự viết), đo tốc độ băm |
 
 **Yêu cầu:** Python 3.10+. **Không cần cài thư viện nào** — toàn bộ dùng `hashlib`,
 `hmac`, `secrets`, `json` của thư viện chuẩn (chọn cách này để demo không phụ thuộc
@@ -40,10 +40,12 @@ python hashguard.py password weak-demo   # MD5 không salt bị bóc bằng 5 t�
 
 # === HMAC ===
 python hashguard.py hmac demo            # 3 kịch bản Alice-Bob (thật/sửa tin/sai khóa)
+python hashguard.py hmac totp            # mã 6 số kiểu Google Authenticator (RFC 6238)
 
 # === Tấn công ===
 python hashguard.py attacks birthday --bits 20   # nghịch lý sinh nhật, kỳ vọng ~1024 lần thử
 python hashguard.py attacks speed                # MD5 vs SHA-256: MB/s
+python hashguard.py attacks lengthext            # length-extension: giả mạo tag không cần khóa
 
 # === Khác ===
 python hashguard.py hash "abc" --avalanche  # hiệu ứng tuyết lở: đổi 1 bit → hash khác hẳn
@@ -52,8 +54,22 @@ python hashguard.py hash "abc" --avalanche  # hiệu ứng tuyết lở: đổi 
 ## Kiểm thử
 
 ```bash
-python -m unittest discover -s tests -t . -v
+python -m unittest discover -s tests -t . -v   # 29 bài test
 ```
+
+Bộ test gồm: test vector chuẩn của MD5/SHA-256, RFC 4226 Appendix D (HOTP)
+và RFC 6238 (TOTP), kiểm chứng lõi MD5 tự viết khớp `hashlib`, vòng đời
+baseline→tamper→verify, và tính hợp lệ của tag giả mạo length-extension.
+
+## Mã thoát (exit codes) của `integrity verify`
+
+| Mã | Ý nghĩa |
+|---|---|
+| 0 | Mọi file khớp baseline |
+| 1 | Phát hiện MODIFIED / ADDED / DELETED |
+| 2 | Chưa có baseline — cần chạy `integrity baseline` trước |
+
+Tiện viết script: `python hashguard.py integrity verify || python alert.sh`.
 
 ## Cấu trúc
 

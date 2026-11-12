@@ -142,6 +142,13 @@ Bảng (đưa nguyên vào slide):
 python hashguard.py full-demo
 ```
 
+### Bonus demo — chỉ mở khi Q&A hoặc dư giờ (không nằm trong 5 phút chính)
+
+| Lệnh | Chứng minh điều gì | Câu chốt |
+|---|---|---|
+| `python hashguard.py attacks lengthext` | Kẻ trộm không biết khóa, nối `; admin=true; them 98.000.000 VND` vào tin ký kiểu `md5(key‖msg)` — server **chấp nhận** tag giả | "Đây chính là lỗ hổng length-extension — lý do bắt buộc dùng HMAC" |
+| `python hashguard.py hmac totp` | Mã 6 số đang đếm ngược 30 giây kiểu Google Authenticator = HMAC của thời gian (RFC 6238) | "Ứng dụng xác thực của HMAC đang nằm trong túi bạn" |
+
 ---
 
 ## 5. Checklist trước khi lên
